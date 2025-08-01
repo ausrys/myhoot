@@ -1,9 +1,7 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 dotenv.config();
-
 const isTest = process.env.NODE_ENV === 'test';
-
 const sequelize = new Sequelize({
     dialect: isTest ? 'sqlite' : 'postgres',
     storage: isTest ? ':memory:' : undefined,
@@ -13,5 +11,4 @@ const sequelize = new Sequelize({
     host: isTest ? undefined : process.env.DB_HOST,
     logging: false,
 });
-
 export default sequelize;
