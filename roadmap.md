@@ -6,17 +6,17 @@ Option to skip auth for solo use
 JWT-based session management (or localStorage)
 
 2. Quiz Management
-Create quiz
+Create quiz +
 
 Edit/delete quiz
 
-Add questions to quiz
+Add questions to quiz +
 
-Question types: multiple choice (start here), maybe later: true/false, open text
+Question types: multiple choice (start here) +
 
-Set time per question
+Set time per question +
 
-3. Game Logic
+1. Game Logic
 Start quiz
 
 Show one question at a time
@@ -114,11 +114,11 @@ Vite (instead of CRA)	Fast React setup
 
 📅 Suggested Roadmap
 Phase 1: MVP Solo Quiz App
- Setup Express + Sequelize + Postgres
+ Setup Express + Sequelize + Postgres +
 
- Setup React + Tailwind + Redux
+ Setup React + Tailwind + Redux +
 
- Create Quiz + Questions
+ Create Quiz + Questions +
 
  Take quiz + show results
 
