@@ -86,7 +86,7 @@ describe(`GET ${TestRoutes.ROOT}${TestRoutes.QUIZ}${TestQuizEndpoints.ALL}`, () 
             `${TestRoutes.ROOT}${TestRoutes.QUIZ}${TestQuizEndpoints.ALL}`,
         );
         expect(res.statusCode).toBe(200);
-        expect(res.body).toBe(typeof Array);
-        expect(res.body.length).toEqual(typeof Array);
+        expect(res.body).toBeInstanceOf(Array);
+        expect(res.body.length).toEqual(1);
     });
 });
