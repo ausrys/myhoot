@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { createQuiz, getAllQuizzes } from '../controllers/quiz.controller';
-import { validate } from '../middeware/validateZodSchema';
-import { CreateQuizSchema } from '../validators/quiz.validator';
+import { createQuiz, getAllQuizzes, getQuizInfo } from '../controllers/quiz.controller';
+import { validatePostData, validateParams } from '../middeware/validateZodSchema';
+import { CreateQuizSchema, QuizIdSchema } from '../validators/quiz.validator';
 
 const quizRouter = Router();
 
-quizRouter.post('/create', validate(CreateQuizSchema), createQuiz);
+quizRouter.post('/create', validatePostData(CreateQuizSchema), createQuiz);
 quizRouter.get('/all', getAllQuizzes);
+quizRouter.get('/:id', validateParams(QuizIdSchema), getQuizInfo);
 
 export default quizRouter;

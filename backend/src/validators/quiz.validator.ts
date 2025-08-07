@@ -15,4 +15,12 @@ export const CreateQuizSchema = z.object({
     isPublic: z.boolean('Must be a boolean!').optional().default(true),
 });
 
+export const QuizIdSchema = z.object({
+    id: z.coerce
+        .number('Must provide a correct id format: number')
+        .int('Number must be an integer'),
+});
+
+export type QuizId = z.infer<typeof QuizIdSchema>;
+
 export type CreateQuizInput = z.infer<typeof CreateQuizSchema>;

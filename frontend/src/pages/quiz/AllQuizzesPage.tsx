@@ -1,34 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
-import { getAllQuizzes } from '../../features/quiz/quizAPI';
-
-type Quiz = {
-    id: number;
-    title: string;
-    description?: string;
-    createdAt: string;
-};
+import { Link, useLoaderData } from 'react-router';
+import type { Quiz } from '../../types/quiz';
 
 export default function AllQuizzesPage() {
-    const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchQuizzes = async () => {
-            try {
-                const res = await getAllQuizzes();
-                setQuizzes(res);
-            } catch (err) {
-                console.error('Failed to fetch quizzes', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchQuizzes();
-    }, []);
-
-    if (loading) return <p className="p-4">Loading quizzes...</p>;
+    const quizzes = useLoaderData() as Quiz[];
 
     if (quizzes.length === 0) return <p className="p-4">No quizzes found.</p>;
 
@@ -49,7 +23,7 @@ export default function AllQuizzesPage() {
                             Created at: {new Date(quiz.createdAt).toLocaleString()}
                         </p>
                         <Link
-                            to={`/quiz/${quiz.id}`}
+                            to={`/quizzes/quiz/${quiz.id}`}
                             className="inline-block mt-3 text-blue-600 hover:underline"
                         >
                             View Details
