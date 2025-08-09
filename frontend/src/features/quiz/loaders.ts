@@ -1,12 +1,17 @@
-import { quizzesQueryOptions, quizInfoQueryOption } from './queries';
-import { queryClient } from '../../queryClient';
-import type { LoaderFunction, LoaderFunctionArgs } from 'react-router';
+import type { QueryClient } from '@tanstack/react-query';
+import { quizInfoQueryOption, quizzesQueryOptions } from './queries';
+import type { LoaderFunctionArgs } from 'react-router';
 
-export async function allQuizzesLoader() {
-    return queryClient.ensureQueryData(quizzesQueryOptions());
-}
-export const getQuizInfoLoader: LoaderFunction = async ({ params }: LoaderFunctionArgs) => {
-    const { id } = params;
-    if (id) return queryClient.ensureQueryData(quizInfoQueryOption(id));
-    return;
+export const allQuizzesLoader = (queryClient: QueryClient) => async () => {
+    const query = quizzesQueryOptions();
+    // ⬇️ return data or fetch it
+    return queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query));
 };
+export const getQuizInfoLoader =
+    (queryClient: QueryClient) =>
+    async ({ params }: LoaderFunctionArgs) => {
+        const id = params.id!;
+        const query = quizInfoQueryOption(id);
+        // ⬇️ return data or fetch it
+        return queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query));
+    };

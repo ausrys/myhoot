@@ -1,4 +1,4 @@
-import { minLength, z } from 'zod';
+import { z } from 'zod';
 
 export const CreateQuestionSchema = z
     .object({
