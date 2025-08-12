@@ -23,8 +23,7 @@ export const createQuestion = async (req: Request<{}, {}, CreateQuestionInput>, 
         );
         return res.status(201).json({
             message: 'Question created successfully',
-            question,
-            options: optionInstances,
+            question: { ...question.dataValues, options: optionInstances },
         });
     } catch (error) {
         console.error('Error creating quiz:', error);

@@ -5,7 +5,6 @@ import AllQuizzesPage from '../pages/quiz/AllQuizzesPage';
 import { allQuizzesLoader, getQuizInfoLoader } from '../features/quiz/loaders';
 import QuizInfoPage from '../pages/quiz/QuizInfoPage';
 import { queryClient } from '../queryClient';
-import AddQuestionPage from '../features/quiz/QuizQuestionForm';
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -24,9 +23,5 @@ export const router = createBrowserRouter([
         path: '/quizzes/quiz/:id',
         loader: getQuizInfoLoader(queryClient),
         Component: QuizInfoPage,
-    },
-    {
-        path: '/question/',
-        Component: AddQuestionPage,
     },
 ]);

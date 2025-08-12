@@ -9,14 +9,31 @@ export type QuizFullInfo = Quiz & {
     questions?: QuizQuestion[];
 };
 export type QuizQuestion = {
-    id: number;
     text: string;
     timeLimit: number;
-    options: QuizQuestionOption[];
+    options: string[];
 };
 
-export type QuizQuestionOption = {
+export type QuizQuestionPayloadFull = QuizQuestion & {
+    quizId: number;
+};
+
+export type OptionsFromBackEnd = {
     id: number;
     text: string;
     isCorrect: boolean;
+};
+export type QuizQuestionFromBackend = {
+    id: number;
+    quizId: number;
+    text: string;
+    timeLimit: number;
+    options: OptionsFromBackEnd[];
+};
+export type QuizFromBackend = {
+    title: string;
+    description: string;
+    createdAt: Date;
+    id: number;
+    questions?: QuizQuestionFromBackend[];
 };

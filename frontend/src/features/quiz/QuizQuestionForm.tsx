@@ -1,23 +1,26 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import {
     CreateQuizQuestionFormSchema,
+    CreateQuizQuestionPayloadSchema,
     type CreateQuizQuestionForm,
 } from '../../validators/zod/quiz.validator';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCreateQuizQuestion } from './mutations';
+import { useParams } from 'react-router';
 
-export default function AddQuestionPage() {
+export default function AddQuestionForm() {
+    const { id } = useParams<{ id: string }>();
     const {
         register,
         handleSubmit,
         control,
         formState: { errors },
-        // watch,
     } = useForm<CreateQuizQuestionForm>({
         defaultValues: {
             text: '',
             timeLimit: 30,
             options: [
-                { text: '', isCorrect: false },
+                { text: '', isCorrect: true },
                 { text: '', isCorrect: false },
             ],
         },
@@ -28,20 +31,15 @@ export default function AddQuestionPage() {
         control,
         name: 'options',
     });
-
+    const { mutate: addQuestion, isPending } = useCreateQuizQuestion(id!);
     const onSubmit = (data: CreateQuizQuestionForm) => {
-        console.log({
-            ...data,
-            // In case the backend expects correctOptions as indexes only
-            // correctOptions: data.correctOptions,
-        });
-        console.log(errors);
+        const payload = CreateQuizQuestionPayloadSchema.safeParse(data);
+        if (payload.success) addQuestion({ ...payload.data, quizId: Number(id) });
+        return;
     };
-
-    // const selectedCorrectOptions = watch('correctOptions', []);
-
+    if (isPending) return <div>Loading...</div>;
     return (
-        <div className="max-w-xl mx-auto p-4">
+        <div className="mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Add Question</h1>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -60,56 +58,55 @@ export default function AddQuestionPage() {
                 <div>
                     <label className="block font-medium mb-2">Options</label>
                     {fields.map((field, index) => (
-                        <div key={field.id} className="flex items-center gap-2 mb-2">
-                            <input
-                                {...register(`options.${index}.text` as const)}
-                                className="input flex-1"
-                                placeholder={`Option ${index + 1}`}
-                            />
-
-                            <label className="flex items-center gap-1">
+                        <div key={field.id}>
+                            <div className="flex items-center gap-2 mb-2">
                                 <input
-                                    type="checkbox"
-                                    {...register(`options.${index}.isCorrect`)}
+                                    {...register(`options.${index}.text` as const)}
+                                    className="input flex-1"
+                                    placeholder={`Option ${index + 1}`}
                                 />
-                                Correct
-                            </label>
 
-                            {fields.length > 2 && (
-                                <button
-                                    type="button"
-                                    onClick={() => remove(index)}
-                                    className="text-red-500"
-                                >
-                                    Remove
-                                </button>
-                            )}
-                            {errors.options && (
-                                <p className="text-red-500">
-                                    {errors?.options[index]?.text?.message as string}
-                                </p>
-                            )}
+                                <label className="flex items-center gap-1">
+                                    <input
+                                        type="checkbox"
+                                        {...register(`options.${index}.isCorrect`)}
+                                    />
+                                    Correct
+                                </label>
+                            </div>
+                            <div>
+                                {fields.length > 2 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => remove(index)}
+                                        className="text-red-500"
+                                    >
+                                        Remove
+                                    </button>
+                                )}
+                                {errors.options && (
+                                    <p className="text-red-500">
+                                        {errors?.options[index]?.text?.message as string}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     ))}
                     {errors.options && (
-                        <p className="text-red-500">{errors.options.message as string}</p>
-                    )}
-                    {/* {errors.correctOptions && (
-                        <p className="text-red-500">{errors.correctOptions.message}</p>
-                    )} */}
-                    {errors.options && (
                         <p className="text-red-500">{errors?.options?.root?.message as string}</p>
                     )}
-                    <button
-                        type="button"
-                        onClick={() => append({ text: '', isCorrect: false })}
-                        className="btn"
-                    >
-                        Add Option
-                    </button>
+                    {fields.length < 4 ? (
+                        <button
+                            type="button"
+                            onClick={() => append({ text: '', isCorrect: false })}
+                            className="btn"
+                        >
+                            Add Option
+                        </button>
+                    ) : null}
                 </div>
 
-                <button type="submit" className="btn-primary" onClick={() => console.log(errors)}>
+                <button type="submit" className="btn-primary">
                     Save
                 </button>
             </form>
