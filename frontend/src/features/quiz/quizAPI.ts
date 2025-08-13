@@ -19,3 +19,9 @@ export const createQuestion = async (data: QuizQuestionPayloadFull) => {
     const res = await axios.post('/question/create', data);
     return res.data;
 };
+export const deleteQuiz = async (id: number) => {
+    const res = await axios.delete('/quiz/delete', {
+        data: { id },
+    });
+    return res.data;
+};

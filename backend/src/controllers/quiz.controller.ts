@@ -48,3 +48,15 @@ export const getQuizInfo = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+export const deleteQuiz = async (req: Request<{}, {}, { id: number }>, res: Response) => {
+    try {
+        const { id } = req.body;
+        const quiz = await Quiz.findByPk(id);
+        if (!quiz) return res.status(404).json({ error: 'Quiz does not exist' });
+        await quiz.destroy();
+        res.status(200).json({ message: 'Quiz was successfuly deleted' });
+    } catch (error) {
+        console.error('Error deleting quiz:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

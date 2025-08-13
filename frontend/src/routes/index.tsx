@@ -5,8 +5,12 @@ import AllQuizzesPage from '../pages/quiz/AllQuizzesPage';
 import { allQuizzesLoader, getQuizInfoLoader } from '../features/quiz/loaders';
 import QuizInfoPage from '../pages/quiz/QuizInfoPage';
 import { queryClient } from '../queryClient';
+import Layout from '../layouts/Layout';
 export const router = createBrowserRouter([
     {
+        Component: Layout,
+        children: [
+            {
         path: '/',
         element: <App />,
     },
@@ -24,4 +28,8 @@ export const router = createBrowserRouter([
         loader: getQuizInfoLoader(queryClient),
         Component: QuizInfoPage,
     },
+        ]
+    }
+    ,
+    
 ]);

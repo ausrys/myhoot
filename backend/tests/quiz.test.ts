@@ -90,3 +90,14 @@ describe(`GET ${TestRoutes.ROOT}${TestRoutes.QUIZ}${TestQuizEndpoints.ALL}`, () 
         expect(res.body.length).toEqual(1);
     });
 });
+describe(`DELETE ${TestRoutes.ROOT}${TestRoutes.QUIZ}${TestQuizEndpoints.DELETE}`, () => {
+    it('should check if it deletes the quiz', async () => {
+        const res = await request(app)
+            .delete(`${TestRoutes.ROOT}${TestRoutes.QUIZ}${TestQuizEndpoints.DELETE}`)
+            .send({
+                id: 1,
+            });
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe('Quiz was successfuly deleted');
+    });
+});

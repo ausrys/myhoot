@@ -29,7 +29,7 @@ describe(`POST ${TestRoutes.ROOT}${TestRoutes.QUESTION}${TestQuestionEndpoints.C
             } as CreateQuestionInput);
         expect(res.statusCode).toBe(201);
         expect(res.body.question).toHaveProperty('quizId');
-        expect(res.body.question.quizId).toBe(1);
+        expect(res.body.question.quizId).toBe(2);
         expect(res.body.options.length).toBe(4);
         expect(res.body.options[0].isCorrect).toBe(true);
         expect(res.body.options[1].isCorrect).toBe(false);

@@ -6,6 +6,7 @@ export enum TestRoutes {
 export enum TestQuizEndpoints {
     CREATE = '/create',
     ALL = '/all',
+    DELETE = '/delete',
 }
 export enum TestQuestionEndpoints {
     CREATE = '/create',

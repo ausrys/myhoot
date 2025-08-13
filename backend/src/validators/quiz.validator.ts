@@ -17,7 +17,7 @@ export const CreateQuizSchema = z.object({
 
 export const QuizIdSchema = z.object({
     id: z.coerce
-        .number('Must provide a correct id format: number')
+        .number<number>('Must provide a correct id format: number')
         .int('Number must be an integer'),
 });
 

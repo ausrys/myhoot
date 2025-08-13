@@ -183,3 +183,21 @@ client/
 ├── tsconfig.json
 ├── vite.config.ts
 └── package.json
+
+
+<!-- Socket flow -->
+// Client → Server
+"createGame"            // host creates room
+"joinGame"              // player joins room
+"setNickname"           // player chooses nickname
+"startGame"             // host starts quiz
+"submitAnswer"          // player answers question
+
+// Server → Client
+"gameCreated"           // returns gameId
+"playerListUpdate"      // broadcast updated players
+"gameStarted"           // sends first question
+"newQuestion"           // sends question + timer
+"answerResult"          // tells player if correct
+"leaderboardUpdate"     // sends updated scores
+"gameEnded"             // sends final results
