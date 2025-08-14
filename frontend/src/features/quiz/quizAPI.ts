@@ -25,3 +25,7 @@ export const deleteQuiz = async (id: number) => {
     });
     return res.data;
 };
+export const createSession = async (quizId: number) => {
+    const res = await axios.post('/session/create', { quizId: quizId });
+    return res.data;
+};

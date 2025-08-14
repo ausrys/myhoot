@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createQuestion, deleteQuiz } from './quizAPI';
+import { createQuestion, createSession, deleteQuiz } from './quizAPI';
 import type { Quiz, QuizFromBackend, QuizQuestionPayloadFull } from '../../types/quiz';
 import { quizInfoQueryKey, quizzesQueryKey } from './queries';
 
@@ -35,5 +35,10 @@ export const useDeleteQuiz = () => {
             // We can refetch the data from the backend using invalidateQueries, which would refetch the data.
             // queryClient.invalidateQueries({ queryKey: [quizzesQueryKey] });
         },
+    });
+};
+export const useCreateQuizSession = () => {
+    return useMutation({
+        mutationFn: (quizId: number) => createSession(quizId),
     });
 };

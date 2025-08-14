@@ -1,8 +1,9 @@
-import { useLoaderData, useParams } from 'react-router';
+import { useLoaderData, useNavigate, useParams } from 'react-router';
 import AddQuestionForm from '../../features/quiz/QuizQuestionForm';
 import { useQuery } from '@tanstack/react-query';
 import { quizInfoQueryOption } from '../../features/quiz/queries';
 import type { getQuizInfoLoader } from '../../features/quiz/loaders';
+import { useCreateQuizSession } from '../../features/quiz/mutations';
 export default function QuizInfoPage() {
     const initialData = useLoaderData() as Awaited<
         ReturnType<ReturnType<typeof getQuizInfoLoader>>
@@ -13,7 +14,15 @@ export default function QuizInfoPage() {
         initialData: initialData,
         staleTime: 1000 * 5,
     });
-
+    const navigate = useNavigate();
+    const { mutate: createSession } = useCreateQuizSession();
+    const handleCreateSession = () => {
+        createSession(quiz.id, {
+            onSuccess: (data) => {
+                navigate(`/game/waiting-room/${data.id}`);
+            },
+        });
+    };
     return (
         <div className="flex justify-center gap-x-28 p-6">
             <div className="max-w-2xl">
@@ -40,6 +49,9 @@ export default function QuizInfoPage() {
             </div>
             <div className="max-w-lg">
                 <AddQuestionForm />
+            </div>
+            <div>
+                <button onClick={() => handleCreateSession()}>Create Session</button>
             </div>
         </div>
     );

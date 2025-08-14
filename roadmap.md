@@ -201,3 +201,6 @@ client/
 "answerResult"          // tells player if correct
 "leaderboardUpdate"     // sends updated scores
 "gameEnded"             // sends final results
+
+
+<!-- !!!!!!!! Implement host control -->

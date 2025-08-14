@@ -1,9 +1,10 @@
 import { createServer } from 'node:http';
+import { instrument } from '@socket.io/admin-ui';
 import app from './app';
 import sequelize from './config/database';
 import './models/index';
-import { Server as SocketIOServer } from 'socket.io';
 import { initSocket } from './sockets';
+import { setIO } from './sockets/socketInstance';
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
@@ -18,8 +19,12 @@ const startServer = async () => {
         const httpServer = createServer(app);
 
         // Init socket layer
-        initSocket(httpServer);
-
+        const io = initSocket(httpServer);
+        setIO(io);
+        instrument(io, {
+            auth: false,
+            mode: 'development',
+        });
         httpServer.listen(PORT, () => {
             console.log(`🚀 Server listening on http://localhost:${PORT}`);
         });
