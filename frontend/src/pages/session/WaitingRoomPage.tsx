@@ -1,42 +1,30 @@
 // src/components/WaitingRoom.tsx
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
-import { io, Socket } from 'socket.io-client';
+import { connectSocket, startGame } from '../../store/slices/socketSlice';
+import type { RootState } from '../../store';
 
 export default function WaitingRoom() {
     const { id } = useParams<{ id: string }>();
-    const [players, setPlayers] = useState<string[]>([]);
-    const [socket, setSocket] = useState<Socket | null>(null);
     const [username, setNickname] = useState('');
     const [showModal, setShowModal] = useState(true); // show nickname modal by default
     const [hasJoined, setHasJoined] = useState(false);
+    const socket = useSelector((state: RootState) => state.socket.socket);
+    const players = useSelector((state: RootState) => state.socket.players);
+    const gameState = useSelector((state: RootState) => state.socket.gameState);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     useEffect(() => {
-        if (!id || !hasJoined) return;
-        const newSocket = io('http://localhost:5000'); // backend URL
-        setSocket(newSocket);
-
-        // Join the session room
-        newSocket.emit('joinSession', { sessionId: id, username: username });
-        // Listen for player list updates
-        newSocket.on('playersUpdate', (playerList: string[]) => {
-            setPlayers(playerList);
-        });
-        newSocket.on('game_started', ({ sessionId }) => {
-            newSocket.off('game_started'); // cleanup
-            navigate(`/game/${sessionId}`);
-        });
-        return () => {
-            // Remove listeners to prevent duplicates
-            newSocket.off('playersUpdate');
-            newSocket.off('game_started');
-            newSocket.disconnect();
-        };
-    }, [id, hasJoined]);
+        if (gameState === 'in_progress') {
+            navigate(`/game/${id}`);
+        }
+    }, [gameState, navigate, id]);
     const handleJoin = () => {
         if (username.trim()) {
             setShowModal(false);
             setHasJoined(true);
+            dispatch(connectSocket({ username, sessionId: id! }));
         }
     };
 
@@ -70,7 +58,7 @@ export default function WaitingRoom() {
                     <button
                         onClick={() => {
                             if (socket && id) {
-                                socket.emit('start_game', { sessionId: id });
+                                dispatch(startGame());
                             }
                         }}
                         className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"

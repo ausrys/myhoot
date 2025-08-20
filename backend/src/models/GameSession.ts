@@ -1,12 +1,24 @@
-import { DataTypes, Model } from 'sequelize';
+import {
+    DataTypes,
+    Model,
+    InferAttributes,
+    InferCreationAttributes,
+    CreationOptional,
+} from 'sequelize';
 import sequelize from '../config/database';
 import Quiz from './Quiz';
 
-class GameSession extends Model {
-    declare id: number;
+class GameSession extends Model<
+    InferAttributes<GameSession>,
+    InferCreationAttributes<GameSession>
+> {
+    declare id: CreationOptional<number>;
     declare quizId: number;
     declare status: 'waiting' | 'in_progress' | 'finished';
-    declare endTime?: Date;
+    declare endTime: Date | null;
+    declare startTime: Date | null;
+    declare currentQuestionIndex: number;
+    declare quizQuestionIds: number[];
 }
 GameSession.init(
     {
@@ -30,6 +42,15 @@ GameSession.init(
         startTime: {
             type: DataTypes.DATE,
             allowNull: true,
+        },
+        currentQuestionIndex: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: false,
+        },
+        quizQuestionIds: {
+            type: DataTypes.ARRAY(DataTypes.INTEGER),
+            allowNull: false,
         },
     },
     {

@@ -1,10 +1,16 @@
 // models/GameUser.ts
-import { DataTypes, Model } from 'sequelize';
+import {
+    CreationOptional,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from 'sequelize';
 import sequelize from '../config/database';
 import GameSession from './GameSession';
 
-class GameUser extends Model {
-    declare id: number;
+class GameUser extends Model<InferAttributes<GameUser>, InferCreationAttributes<GameUser>> {
+    declare id: CreationOptional<number>;
     declare sessionId: string;
     declare username: string;
     declare score: number;

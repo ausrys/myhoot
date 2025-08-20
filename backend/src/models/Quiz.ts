@@ -1,10 +1,16 @@
-import { DataTypes, Model } from 'sequelize';
+import {
+    CreationOptional,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from 'sequelize';
 import sequelize from '../config/database';
 
-class Quiz extends Model {
-    declare id: number;
+class Quiz extends Model<InferAttributes<Quiz>, InferCreationAttributes<Quiz>> {
+    declare id: CreationOptional<number>;
     declare title: string;
-    declare description: string;
+    declare description: string | null;
     declare isPublic: boolean;
 }
 

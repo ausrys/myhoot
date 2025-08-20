@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { GameSession, GameUser } from '../models';
+import { GameSession, GameUser, Question } from '../models';
 export const registerGameEvents = (io: Server, socket: Socket) => {
     socket.on('joinSession', async ({ sessionId, username }) => {
         try {
@@ -39,7 +39,7 @@ export const registerGameEvents = (io: Server, socket: Socket) => {
         }
     });
 
-    socket.on('start_game', async ({ sessionId }) => {
+    socket.on('startGame', async ({ sessionId }) => {
         // Optionally verify if this socket is host
         const session = await GameSession.findByPk(sessionId);
         if (!session) return;
@@ -63,4 +63,13 @@ export const registerGameEvents = (io: Server, socket: Socket) => {
             players.map((p) => p.username),
         );
     }
+    socket.on('getQuestion', async ({ sessionId }) => {
+        const session = await GameSession.findByPk(sessionId);
+        if (!session) return;
+        const questionId = session.quizQuestionIds[session.currentQuestionIndex];
+        const question = Question.findByPk(questionId);
+        if (!question) return;
+        console.log(question);
+        io.to(sessionId).emit('newQuestion', question);
+    });
 };

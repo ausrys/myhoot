@@ -1,9 +1,15 @@
-import { DataTypes, Model } from 'sequelize';
+import {
+    CreationOptional,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from 'sequelize';
 import sequelize from '../config/database';
 import Question from './Question';
 
-class Option extends Model {
-    declare id: number;
+class Option extends Model<InferAttributes<Option>, InferCreationAttributes<Option>> {
+    declare id: CreationOptional<number>;
     declare text: string;
     declare isCorrect: boolean;
     declare questionId: number;

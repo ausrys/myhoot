@@ -1,9 +1,15 @@
-import { DataTypes, Model } from 'sequelize';
+import {
+    CreationOptional,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from 'sequelize';
 import sequelize from '../config/database';
 import Quiz from './Quiz';
 
-class Question extends Model {
-    declare id: number;
+class Question extends Model<InferAttributes<Question>, InferCreationAttributes<Question>> {
+    declare id: CreationOptional<number>;
     declare text: string;
     declare timeLimit: number;
     declare quizId: number;
